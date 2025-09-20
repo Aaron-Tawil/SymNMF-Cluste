@@ -1,0 +1,15 @@
+# Build artifacts
+build/
+symnmf
+*.o
+*.so
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Generated tester inputs
+test_input*.txt
+
+# Logs
+*.log
