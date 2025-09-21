@@ -13,3 +13,6 @@ test_input*.txt
 
 # Logs
 *.log
+
+# Codex help folder
+codex_help/
