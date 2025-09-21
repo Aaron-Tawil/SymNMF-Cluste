@@ -13,3 +13,5 @@ test_input*.txt
 
 # Logs
 *.log
+codex_help/
+tests/external/TAU_Testers/
