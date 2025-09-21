@@ -77,10 +77,20 @@ static int builder_to_matrix(const dataset_builder_t *builder, matrix_t **matrix
  */
 static int is_ascii_space(char ch);
 
+/**
+ * @brief Prints a generic error message to stdout.
+ */
 void symnmf_log_error(void) {
     fprintf(stdout, "An Error Has Occurred\n");
 }
 
+/**
+ * @brief Creates a new matrix.
+ *
+ * @param rows The number of rows in the matrix.
+ * @param cols The number of columns in the matrix.
+ * @return A pointer to the new matrix, or NULL on failure.
+ */
 matrix_t *matrix_create(size_t rows, size_t cols) {
     matrix_t *matrix = NULL;
     size_t total;
@@ -118,6 +128,11 @@ matrix_t *matrix_create(size_t rows, size_t cols) {
     return matrix;
 }
 
+/**
+ * @brief Frees the memory allocated for a matrix.
+ *
+ * @param matrix A pointer to the matrix to free.
+ */
 void matrix_free(matrix_t *matrix) {
     if (matrix == NULL) {
         return;
@@ -127,6 +142,13 @@ void matrix_free(matrix_t *matrix) {
     free(matrix);
 }
 
+/**
+ * @brief Reads a dataset from a file into a matrix.
+ *
+ * @param path The path to the dataset file.
+ * @param out_matrix A pointer to a matrix pointer that will be updated to point to the new matrix.
+ * @return SYM_SUCCESS on success, SYM_FAILURE on failure.
+ */
 int dataset_from_file(const char *path, matrix_t **out_matrix) {
     FILE *fp = NULL;
     dataset_builder_t builder;

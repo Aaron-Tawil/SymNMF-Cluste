@@ -31,6 +31,13 @@ static int output_degree_goal(const matrix_t *points);
  */
 static int output_normalized_goal(const matrix_t *points);
 
+/**
+ * @brief Main function for the SymNMF command-line interface.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv An array of command-line arguments.
+ * @return SYM_SUCCESS on success, SYM_FAILURE on failure.
+ */
 int symnmf_cli_main(int argc, char **argv) {
     matrix_t *points = NULL;
     int status = SYM_FAILURE;
@@ -64,11 +71,6 @@ error:
     symnmf_log_error();
     matrix_free(points);
     return SYM_FAILURE;
-}
-
-int main(int argc, char **argv) {
-    int status = symnmf_cli_main(argc, argv);
-    return (status == SYM_SUCCESS) ? 0 : 1;
 }
 
 static int print_matrix(const matrix_t *matrix) {
@@ -179,4 +181,16 @@ cleanup:
     matrix_free(degree);
     matrix_free(normalized);
     return status;
+}
+
+/**
+ * @brief Entry point of the program.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv An array of command-line arguments.
+ * @return 0 on success, 1 on failure.
+ */
+int main(int argc, char **argv) {
+    int status = symnmf_cli_main(argc, argv);
+    return (status == SYM_SUCCESS) ? 0 : 1;
 }

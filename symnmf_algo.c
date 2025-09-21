@@ -101,6 +101,13 @@ static double update_basis_step(matrix_t *basis, const matrix_t *numerator, cons
  */
 static int run_iteration(matrix_t *basis, const matrix_t *normalized, matrix_t *numerator, matrix_t *denominator, matrix_t *gram, matrix_t *next, double beta, double *delta_out);
 
+/**
+ * @brief Computes the similarity matrix from a set of data points.
+ *
+ * @param points A matrix where each row is a data point.
+ * @param similarity The output similarity matrix.
+ * @return SYM_SUCCESS on success, SYM_FAILURE on failure.
+ */
 int compute_similarity(const matrix_t *points, matrix_t *similarity) {
     size_t n;
     size_t i;
@@ -127,6 +134,13 @@ int compute_similarity(const matrix_t *points, matrix_t *similarity) {
     return SYM_SUCCESS;
 }
 
+/**
+ * @brief Computes the degree matrix from a similarity matrix.
+ *
+ * @param similarity The similarity matrix.
+ * @param degree The output degree matrix.
+ * @return SYM_SUCCESS on success, SYM_FAILURE on failure.
+ */
 int compute_degree(const matrix_t *similarity, matrix_t *degree) {
     size_t n;
     size_t i;
@@ -153,6 +167,14 @@ int compute_degree(const matrix_t *similarity, matrix_t *degree) {
     return SYM_SUCCESS;
 }
 
+/**
+ * @brief Computes the normalized similarity matrix.
+ *
+ * @param similarity The similarity matrix.
+ * @param degree The degree matrix.
+ * @param normalized The output normalized similarity matrix.
+ * @return SYM_SUCCESS on success, SYM_FAILURE on failure.
+ */
 int compute_normalized(const matrix_t *similarity, const matrix_t *degree, matrix_t *normalized) {
     double *scale = NULL;
     size_t n = 0;
@@ -174,6 +196,16 @@ int compute_normalized(const matrix_t *similarity, const matrix_t *degree, matri
     return SYM_SUCCESS;
 }
 
+/**
+ * @brief Performs the SymNMF factorization.
+ *
+ * @param basis The initial basis matrix H, which will be updated in place.
+ * @param normalized The normalized similarity matrix W.
+ * @param k The number of clusters.
+ * @param epsilon The convergence threshold.
+ * @param max_iter The maximum number of iterations.
+ * @return SYM_SUCCESS on success, SYM_FAILURE on failure.
+ */
 int symnmf_factorize(matrix_t *basis, const matrix_t *normalized, size_t k, double epsilon, size_t max_iter) {
     matrix_t *numerator = NULL, *denominator = NULL, *gram = NULL, *next = NULL;
     size_t n = 0, iter;

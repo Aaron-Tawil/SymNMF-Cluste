@@ -27,14 +27,36 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
 
 
 def load_points(path: str) -> List[List[float]]:
-    """Load the dataset via symnmf.load_dataset and return Python lists."""
+    """Load a dataset from a file and return it as a list of lists.
+
+    This function uses `symnmf.load_dataset` to load the data and then converts
+    the resulting NumPy array to a list of lists of floats.
+
+    Args:
+        path: The path to the dataset file.
+
+    Returns:
+        A list of lists, where each inner list represents a data point.
+    """
 
     data = symnmf.load_dataset(path)
     return data.tolist()
 
 
 def run_symnmf(points: List[List[float]], k: int) -> List[int]:
-    """Cluster points using SymNMF and return label assignments."""
+    """Perform SymNMF clustering on a set of points.
+
+    This function takes a list of data points and the number of clusters, k,
+    and performs SymNMF clustering. It returns a list of cluster labels for
+    each data point.
+
+    Args:
+        points: A list of data points, where each point is a list of floats.
+        k: The number of clusters to form.
+
+    Returns:
+        A list of integers representing the cluster label for each data point.
+    """
 
     dataset = np.asarray(points, dtype=np.float64)
     normalized = np.asarray(symnmf_c.norm(dataset), dtype=np.float64)
@@ -44,7 +66,20 @@ def run_symnmf(points: List[List[float]], k: int) -> List[int]:
 
 
 def silhouette_score(points: List[List[float]], labels: List[int]) -> float:
-    """Compute the mean silhouette score for the given clustering."""
+    """Calculate the mean silhouette score for a clustering.
+
+    The silhouette score measures how similar a data point is to its own cluster
+    compared to other clusters. The score ranges from -1 to 1, where a high
+    value indicates that the object is well matched to its own cluster and
+    poorly matched to neighboring clusters.
+
+    Args:
+        points: A list of data points, where each point is a list of floats.
+        labels: A list of cluster labels for each data point.
+
+    Returns:
+        The mean silhouette score for all data points.
+    """
 
     clusters: List[List[List[float]]] = []
     k = max(labels) + 1
@@ -95,7 +130,19 @@ def _euclid(p: List[float], q: List[float]) -> float:
 
 
 def kmeans(points: List[List[float]], k: int) -> List[int]:
-    """Run a basic Lloyd's k-means loop and return cluster labels."""
+    """Perform k-means clustering on a set of points.
+
+    This function implements Lloyd's algorithm for k-means clustering. It takes a
+    list of data points and the number of clusters, k, and returns a list of
+    cluster labels for each data point.
+
+    Args:
+        points: A list of data points, where each point is a list of floats.
+        k: The number of clusters to form.
+
+    Returns:
+        A list of integers representing the cluster label for each data point.
+    """
 
     centroids = [point[:] for point in points[:k]]
     for _ in range(MAX_ITER):

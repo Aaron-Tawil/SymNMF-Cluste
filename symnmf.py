@@ -31,7 +31,21 @@ _TOKEN_PATTERN = re.compile(r"[\s,]+")
 
 
 def load_dataset(path: str) -> np.ndarray:
-    """Load a dataset file into a contiguous float64 numpy array."""
+    """Load a dataset from a file into a NumPy array.
+
+    The file is expected to be a text file where each line represents a data point,
+    and the values within the line are separated by commas or whitespace.
+
+    Args:
+        path: The path to the dataset file.
+
+    Returns:
+        A NumPy array of float64 values representing the dataset.
+
+    Raises:
+        ValueError: If the dataset is empty, or if the rows have an inconsistent
+            number of columns.
+    """
 
     rows: list[list[float]] = []
     with open(path, "r", encoding="utf-8") as handle:
@@ -51,7 +65,21 @@ def load_dataset(path: str) -> np.ndarray:
 
 
 def init_H(W: np.ndarray, k: int) -> np.ndarray:
-    """Create a non-negative initialization matrix for SymNMF."""
+    """Initialize a non-negative matrix H for the SymNMF algorithm.
+
+    The initialization is based on the mean of the similarity matrix W.
+
+    Args:
+        W: The similarity matrix (n x n).
+        k: The number of clusters.
+
+    Returns:
+        A randomly initialized non-negative matrix H (n x k).
+
+    Raises:
+        ValueError: If W is not a square matrix, or if k is not within the
+            valid range (1 <= k <= n).
+    """
 
     if W.ndim != 2 or W.shape[0] != W.shape[1]:
         raise ValueError("W must be a square matrix")
@@ -68,7 +96,23 @@ def init_H(W: np.ndarray, k: int) -> np.ndarray:
 
 
 def run(goal: str, k: int, path: str):
-    """Dispatch the requested goal to the accelerated C extension."""
+    """Execute a specific goal of the SymNMF algorithm.
+
+    This function acts as a dispatcher, loading the dataset and calling the
+    appropriate function from the C extension based on the specified goal.
+
+    Args:
+        goal: The goal to execute. One of "sym", "ddg", "norm", or "symnmf".
+        k: The number of clusters (only used for the "symnmf" goal).
+        path: The path to the dataset file.
+
+    Returns:
+        The result of the computation, which is a NumPy array.
+
+    Raises:
+        RuntimeError: If the C extension is not available.
+        ValueError: If k is invalid for the "symnmf" goal.
+    """
 
     if _symnmf_c is None:
         raise RuntimeError("symnmf_c extension is not available")

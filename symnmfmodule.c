@@ -36,6 +36,13 @@ static PyObject *matrix_to_pyobject(const matrix_t *matrix);
  */
 static PyObject *run_simple_goal(PyObject *points_obj, simple_goal_t goal);
 
+/**
+ * @brief Python binding for the sym goal.
+ *
+ * @param self The module object.
+ * @param args The Python arguments.
+ * @return A new Python object containing the result matrix, or NULL if an error occurred.
+ */
 static PyObject *sym(PyObject *self, PyObject *args) {
     PyObject *points_obj;
     (void)self;
@@ -47,6 +54,13 @@ static PyObject *sym(PyObject *self, PyObject *args) {
     return run_simple_goal(points_obj, GOAL_SYM);
 }
 
+/**
+ * @brief Python binding for the ddg goal.
+ *
+ * @param self The module object.
+ * @param args The Python arguments.
+ * @return A new Python object containing the result matrix, or NULL if an error occurred.
+ */
 static PyObject *ddg(PyObject *self, PyObject *args) {
     PyObject *points_obj;
     (void)self;
@@ -58,6 +72,13 @@ static PyObject *ddg(PyObject *self, PyObject *args) {
     return run_simple_goal(points_obj, GOAL_DDG);
 }
 
+/**
+ * @brief Python binding for the norm goal.
+ *
+ * @param self The module object.
+ * @param args The Python arguments.
+ * @return A new Python object containing the result matrix, or NULL if an error occurred.
+ */
 static PyObject *norm(PyObject *self, PyObject *args) {
     PyObject *points_obj;
     (void)self;
@@ -69,6 +90,13 @@ static PyObject *norm(PyObject *self, PyObject *args) {
     return run_simple_goal(points_obj, GOAL_NORM);
 }
 
+/**
+ * @brief Python binding for the symnmf goal.
+ *
+ * @param self The module object.
+ * @param args The Python arguments.
+ * @return A new Python object containing the result matrix, or NULL if an error occurred.
+ */
 static PyObject *symnmf(PyObject *self, PyObject *args) {
     PyObject *basis_obj;
     PyObject *normalized_obj;
@@ -112,6 +140,11 @@ static struct PyModuleDef symnmfmodule = {
     SymNMFMethods,
 };
 
+/**
+ * @brief Initializes the symnmf_c module.
+ *
+ * @return A new Python module object, or NULL if an error occurred.
+ */
 PyMODINIT_FUNC PyInit_symnmf_c(void) {
     return PyModule_Create(&symnmfmodule);
 }
