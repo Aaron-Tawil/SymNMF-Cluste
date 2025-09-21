@@ -1,0 +1,3 @@
+[submodule "tests/external/TAU_Testers"]
+	path = tests/external/TAU_Testers
+	url = https://github.com/avivjan/TAU_Testers.git
