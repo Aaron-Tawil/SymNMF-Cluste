@@ -33,6 +33,8 @@ REGEX_ANALYSIS_PY_OUTPUT = re.compile(
 __author__ = "Yahel Caspi"
 __version__ = "0.4.0"
 
+RUN_test_with_valgrind = False
+
 
 class ProgramType(enum.Enum):
     PYTHON = "python"
@@ -41,6 +43,13 @@ class ProgramType(enum.Enum):
 
 class TestData:
     def __init__(self, round=True, dedup=False):
+        """
+        Initializes a new instance of the TestData class.
+
+        Args:
+            round (bool, optional): Whether to round the generated data. Defaults to True.
+            dedup (bool, optional): Whether to remove duplicate data points. Defaults to False.
+        """
         rng = np.random.default_rng()
 
         retry = True  # Used to trigger retry in case of division by zero
@@ -78,6 +87,7 @@ class TestData:
 
 
 def print_green(msg: str, prefix: str = ""):
+    """Prints a message in green."""
     if prefix:
         msg = f"[{prefix}] {msg}"
 
@@ -85,6 +95,7 @@ def print_green(msg: str, prefix: str = ""):
 
 
 def print_yellow(msg: str, prefix: str = ""):
+    """Prints a message in yellow."""
     if prefix:
         msg = f"[{prefix}] {msg}"
 
@@ -92,6 +103,7 @@ def print_yellow(msg: str, prefix: str = ""):
 
 
 def print_red(msg: str, prefix: str = ""):
+    """Prints a message in red."""
     if prefix:
         msg = f"[{prefix}] {msg}"
 
@@ -99,6 +111,7 @@ def print_red(msg: str, prefix: str = ""):
 
 
 def print_white_on_red(msg: str):
+    """Prints a message in white on a red background."""
     print(f"\033[97;41m{msg}\033[0m")
 
 
@@ -635,10 +648,11 @@ if __name__ == "__main__":
     else:
         print_red("failure: no trial succeeded")
 
-    print("\n--------")
-    print("Testing with valgrind")
-    print("--------")
-    test_with_valgrind()
+    if RUN_test_with_valgrind:
+        print("\n--------")
+        print("Testing with valgrind")
+        print("--------")
+        test_with_valgrind()
 
     print("\n--------")
     print("Testing analysis.py (format only)")

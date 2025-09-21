@@ -3,7 +3,7 @@
 CC      := gcc
 CFLAGS  := -ansi -Wall -Wextra -Werror -pedantic-errors -Iinclude
 LDFLAGS := -lm
-SRC     := src/matrix_ops.c src/symnmf_algo.c src/symnmf.c
+SRC     := matrix_ops.c symnmf_algo.c symnmf.c
 TARGET  := symnmf
 
 all: build

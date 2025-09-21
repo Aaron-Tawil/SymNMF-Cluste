@@ -20,6 +20,7 @@
 ## Coding Style & Naming Conventions
 - Python: follow PEP 8, 4-space indentation, descriptive `snake_case` (`init_h`, `compute_w`).
 - C: ANSI C (C90) compatible code, 4-space indentation, `snake_case` for functions and `SCREAMING_SNAKE_CASE` for constants/macros.
+- C:  newline at end of file [-Werror,-Wnewline-eof].
 - Format floating-point output with `"%.4f"`; keep function implementations within the assignment’s 40-line guideline.
 
 ## Testing Guidelines

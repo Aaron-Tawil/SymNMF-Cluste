@@ -14,11 +14,11 @@ EXTENSION_NAME = "symnmf_c"
 symnmf_extension = Extension(
     EXTENSION_NAME,
     sources=[
-        "src/symnmfmodule.c",
-        "src/symnmf_algo.c",
-        "src/matrix_ops.c",
+        "symnmfmodule.c",
+        "symnmf_algo.c",
+        "matrix_ops.c",
     ],
-    include_dirs=["include", _np.get_include()],
+    include_dirs=[_np.get_include()],
 )
 
 if __name__ == "__main__":
