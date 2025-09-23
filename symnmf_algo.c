@@ -208,15 +208,10 @@ int compute_normalized(const matrix_t *similarity, const matrix_t *degree, matri
  */
 int symnmf_factorize(matrix_t *basis, const matrix_t *normalized, size_t k, double epsilon, size_t max_iter) {
     matrix_t *numerator = NULL, *denominator = NULL, *gram = NULL, *next = NULL;
-    size_t n = 0, iter;
-    double delta = 0.0;
-    const double beta = 0.5;
-    int status = SYM_FAILURE;
-
+    size_t n = 0, iter; double delta = 0.0; const double beta = 0.5; int status = SYM_FAILURE;
     if (validate_factorize_args(basis, normalized, k, &n) != SYM_SUCCESS) {
         return SYM_FAILURE;
     }
-
     numerator = matrix_create(n, k);
     denominator = matrix_create(n, k);
     gram = matrix_create(k, k);
@@ -224,7 +219,6 @@ int symnmf_factorize(matrix_t *basis, const matrix_t *normalized, size_t k, doub
     if (numerator == NULL || denominator == NULL || gram == NULL || next == NULL) {
         goto cleanup;
     }
-
     for (iter = 0; iter < max_iter; ++iter) {
         if (run_iteration(basis, normalized, numerator, denominator, gram, next, beta, &delta) != SYM_SUCCESS) {
             goto cleanup;
@@ -233,9 +227,7 @@ int symnmf_factorize(matrix_t *basis, const matrix_t *normalized, size_t k, doub
             break;
         }
     }
-
     status = SYM_SUCCESS;
-
 cleanup:
     matrix_free(numerator);
     matrix_free(denominator);

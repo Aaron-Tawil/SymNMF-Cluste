@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare SymNMF and KMeans clustering quality via silhouette score."""
+"""Compare SymNMF and KMeans clustering quality using silhouette scores."""
 
 from __future__ import annotations
 
@@ -18,7 +18,14 @@ MAX_ITER = 300
 
 
 def parse_args(argv: Sequence[str]) -> argparse.Namespace:
-    """Parse command-line arguments for the analysis driver."""
+    """Parse command-line arguments for the analysis driver.
+
+    Args:
+        argv: A sequence of command-line arguments.
+
+    Returns:
+        An `argparse.Namespace` object containing the parsed arguments.
+    """
 
     parser = argparse.ArgumentParser(description="SymNMF vs KMeans analysis")
     parser.add_argument("k", type=int, help="Number of clusters")
@@ -98,7 +105,15 @@ def silhouette_score(points: List[List[float]], labels: List[int]) -> float:
 
 
 def _mean_intra_distance(point: List[float], cluster: List[List[float]]) -> float:
-    """Return the mean distance from a point to others in its cluster."""
+    """Calculate the mean distance from a point to others in its cluster.
+
+    Args:
+        point: The data point for which to calculate the distance.
+        cluster: A list of data points belonging to the same cluster as `point`.
+
+    Returns:
+        The mean distance from the point to other points in its cluster.
+    """
 
     if len(cluster) <= 1:
         return 0.0
@@ -111,7 +126,16 @@ def _mean_intra_distance(point: List[float], cluster: List[List[float]]) -> floa
 
 
 def _nearest_cluster_distance(point: List[float], label: int, clusters: List[List[List[float]]]) -> float:
-    """Return the smallest average distance to any other cluster."""
+    """Calculate the smallest average distance to any other cluster.
+
+    Args:
+        point: The data point for which to calculate the distance.
+        label: The cluster label of the `point`.
+        clusters: A list of all clusters, where each cluster is a list of points.
+
+    Returns:
+        The mean distance from the point to the nearest cluster.
+    """
 
     best = None
     for idx, cluster in enumerate(clusters):
@@ -124,7 +148,15 @@ def _nearest_cluster_distance(point: List[float], label: int, clusters: List[Lis
 
 
 def _euclid(p: List[float], q: List[float]) -> float:
-    """Euclidean distance helper."""
+    """Calculate the Euclidean distance between two points.
+
+    Args:
+        p: The first point.
+        q: The second point.
+
+    Returns:
+        The Euclidean distance between p and q.
+    """
 
     return math.sqrt(sum((pi - qi) ** 2 for pi, qi in zip(p, q)))
 
@@ -173,7 +205,18 @@ def kmeans(points: List[List[float]], k: int) -> List[int]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Entry point for the analysis script."""
+    """Run the analysis comparing SymNMF and KMeans clustering.
+
+    This function parses command-line arguments, loads the dataset, runs both
+    SymNMF and k-means clustering algorithms, and prints their respective
+    silhouette scores.
+
+    Args:
+        argv: A sequence of command-line arguments.
+
+    Returns:
+        0 on success, 1 on error.
+    """
 
     try:
         args = parse_args(argv if argv is not None else sys.argv[1:])
