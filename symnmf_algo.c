@@ -327,7 +327,10 @@ static int validate_factorize_args(matrix_t *basis, const matrix_t *normalized, 
     }
 
     n = normalized->rows;
-    if (basis->rows != n || basis->cols != k || k == 0) {
+    if (k <= 1 || k >= n) {
+        return SYM_FAILURE;
+    }
+    if (basis->rows != n || basis->cols != k) {
         return SYM_FAILURE;
     }
 

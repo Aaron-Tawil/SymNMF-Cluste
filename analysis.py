@@ -9,6 +9,7 @@ import sys
 from typing import List, Sequence
 
 import numpy as np
+from sklearn.metrics import silhouette_score as sklearn_silhouette_score
 
 import symnmf
 import symnmf_c  # type: ignore
@@ -65,6 +66,7 @@ def run_symnmf(points: List[List[float]], k: int) -> List[int]:
         A list of integers representing the cluster label for each data point.
     """
 
+    symnmf.validate_k(k, len(points))
     dataset = np.asarray(points, dtype=np.float64)
     normalized = np.asarray(symnmf_c.norm(dataset), dtype=np.float64)
     initial_h = symnmf.init_H(normalized, k)
@@ -73,12 +75,7 @@ def run_symnmf(points: List[List[float]], k: int) -> List[int]:
 
 
 def silhouette_score(points: List[List[float]], labels: List[int]) -> float:
-    """Calculate the mean silhouette score for a clustering.
-
-    The silhouette score measures how similar a data point is to its own cluster
-    compared to other clusters. The score ranges from -1 to 1, where a high
-    value indicates that the object is well matched to its own cluster and
-    poorly matched to neighboring clusters.
+    """Return the mean silhouette score using scikit-learn's implementation.
 
     Args:
         points: A list of data points, where each point is a list of floats.
@@ -88,63 +85,16 @@ def silhouette_score(points: List[List[float]], labels: List[int]) -> float:
         The mean silhouette score for all data points.
     """
 
-    clusters: List[List[List[float]]] = []
-    k = max(labels) + 1
-    for _ in range(k):
-        clusters.append([])
-    for point, label in zip(points, labels):
-        clusters[label].append(point)
-
-    scores = []
-    for idx, point in enumerate(points):
-        a = _mean_intra_distance(point, clusters[labels[idx]])
-        b = _nearest_cluster_distance(point, labels[idx], clusters)
-        denominator = max(a, b)
-        scores.append(0.0 if denominator == 0.0 else (b - a) / denominator)
-    return sum(scores) / len(scores)
-
-
-def _mean_intra_distance(point: List[float], cluster: List[List[float]]) -> float:
-    """Calculate the mean distance from a point to others in its cluster.
-
-    Args:
-        point: The data point for which to calculate the distance.
-        cluster: A list of data points belonging to the same cluster as `point`.
-
-    Returns:
-        The mean distance from the point to other points in its cluster.
-    """
-
-    if len(cluster) <= 1:
-        return 0.0
-    acc = 0.0
-    for other in cluster:
-        if other is point:
-            continue
-        acc += _euclid(point, other)
-    return acc / (len(cluster) - 1)
-
-
-def _nearest_cluster_distance(point: List[float], label: int, clusters: List[List[List[float]]]) -> float:
-    """Calculate the smallest average distance to any other cluster.
-
-    Args:
-        point: The data point for which to calculate the distance.
-        label: The cluster label of the `point`.
-        clusters: A list of all clusters, where each cluster is a list of points.
-
-    Returns:
-        The mean distance from the point to the nearest cluster.
-    """
-
-    best = None
-    for idx, cluster in enumerate(clusters):
-        if idx == label or not cluster:
-            continue
-        total = sum(_euclid(point, other) for other in cluster)
-        dist = total / len(cluster)
-        best = dist if best is None or dist < best else best
-    return 0.0 if best is None else best
+    dataset = np.asarray(points, dtype=np.float64)
+    unique_labels = set(labels)
+    if len(unique_labels) <= 1 or len(unique_labels) >= len(points):
+        raise RuntimeError("An Error Has Occurred")
+    try:
+        return float(
+            sklearn_silhouette_score(dataset, labels=labels, metric="euclidean")
+        )
+    except ValueError as exc:
+        raise RuntimeError("An Error Has Occurred") from exc
 
 
 def _euclid(p: List[float], q: List[float]) -> float:
@@ -176,6 +126,7 @@ def kmeans(points: List[List[float]], k: int) -> List[int]:
         A list of integers representing the cluster label for each data point.
     """
 
+    symnmf.validate_k(k, len(points))
     centroids = [point[:] for point in points[:k]]
     for _ in range(MAX_ITER):
         clusters = [[] for _ in range(k)]

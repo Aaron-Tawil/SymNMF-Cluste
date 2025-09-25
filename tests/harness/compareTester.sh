@@ -288,13 +288,27 @@ for test_case in "${test_cases[@]}"; do
     # Run analysis.py in the previous directory
     prev_analysis_output=$(python3 "${prev_dir}/analysis.py" "$K" "$file_name" 2>/dev/null)
 
-    # Compare the outputs of analysis.py
+    # Compare the outputs of analysis.py, allowing the error-message edge case
     if [ "$current_analysis_output" == "$prev_analysis_output" ]; then
         echo -e "${GREEN}Analysis test case '${YELLOW}$K $file_name${GREEN}' passed.${NC}\n"
-    else
-        echo -e "${RED}Analysis test case '${YELLOW}$K $file_name${RED}' failed.${NC}"
         echo -e "${BLUE}Current analysis output:${NC}\n$current_analysis_output"
         echo -e "${BLUE}Previous analysis output:${NC}\n$prev_analysis_output\n"
+    else
+        if echo "$current_analysis_output" | grep -q "An Error Has Occurred"; then
+            if [ -z "$prev_analysis_output" ] || echo "$prev_analysis_output" | grep -q "An Error Has Occurred"; then
+                echo -e "${GREEN}Analysis test case '${YELLOW}$K $file_name${GREEN}' passed (error case).${NC}\n"
+                echo -e "${BLUE}Current analysis output:${NC}\n$current_analysis_output"
+                echo -e "${BLUE}Previous analysis output:${NC}\n$prev_analysis_output\n"
+            else
+                echo -e "${RED}Analysis test case '${YELLOW}$K $file_name${RED}' failed.${NC}"
+                echo -e "${BLUE}Current analysis output:${NC}\n$current_analysis_output"
+                echo -e "${BLUE}Previous analysis output:${NC}\n$prev_analysis_output\n"
+            fi
+        else
+            echo -e "${RED}Analysis test case '${YELLOW}$K $file_name${RED}' failed.${NC}"
+            echo -e "${BLUE}Current analysis output:${NC}\n$current_analysis_output"
+            echo -e "${BLUE}Previous analysis output:${NC}\n$prev_analysis_output\n"
+        fi
     fi
 
     # Clean up input file

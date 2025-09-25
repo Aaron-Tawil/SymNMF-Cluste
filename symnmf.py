@@ -28,6 +28,18 @@ np.random.seed(1234)
 EPSILON = 1e-4
 MAX_ITER = 300
 _TOKEN_PATTERN = re.compile(r"[\s,]+")
+_VALID_K_TYPES = (int, np.integer)
+
+
+def validate_k(k: int, n_samples: int) -> None:
+    """Validate that `k` is an integer satisfying 1 < k < n_samples."""
+
+    if not isinstance(k, _VALID_K_TYPES):
+        raise ValueError("k must be an integer")
+    if n_samples <= 2:
+        raise ValueError("dataset must contain more than two samples")
+    if k <= 1 or k >= n_samples:
+        raise ValueError("k must satisfy 1 < k < number of samples")
 
 
 def load_dataset(path: str) -> np.ndarray:
@@ -78,14 +90,13 @@ def init_H(W: np.ndarray, k: int) -> np.ndarray:
 
     Raises:
         ValueError: If W is not a square matrix, or if k is not within the
-            valid range (1 <= k <= n).
+            valid range (1 < k < n).
     """
 
     if W.ndim != 2 or W.shape[0] != W.shape[1]:
         raise ValueError("W must be a square matrix")
     n = W.shape[0]
-    if k <= 0 or k > n:
-        raise ValueError("k must satisfy 1 <= k <= len(W)")
+    validate_k(k, n)
 
     mean_value = float(np.mean(W, dtype=np.float64))
     if mean_value <= 0.0:
@@ -126,8 +137,8 @@ def run(goal: str, k: int, path: str):
     if goal == "norm":
         return np.asarray(_symnmf_c.norm(points), dtype=np.float64)
 
-    if k <= 0 or k > points.shape[0]:
-        raise ValueError("k must satisfy 1 <= k <= number of samples")
+    if goal == "symnmf":
+        validate_k(k, points.shape[0])
 
     W = np.asarray(_symnmf_c.norm(points), dtype=np.float64)
     H0 = init_H(W, k)

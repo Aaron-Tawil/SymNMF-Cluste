@@ -7,7 +7,7 @@
 - Store sample datasets and smoke scripts in `tests/`, matching the CSV-style format consumed by the tools.
 
 ## Dependencies & Tooling
-- Do **not** install new Python or C libraries; rely solely on what ships with the environment (Python stdlib, existing system headers, any preinstalled NumPy/Sklearn).
+- Do **not** install new Python or C libraries (Excepetion: sklearn can be installed and used in analysis.py ); rely solely on what ships with the environment (Python stdlib, existing system headers, any preinstalled NumPy/Sklearn).
 - If a required module is missing, surface the issue to maintainers instead of adding packages or altering system configs.
 - do **not** use NumPy C API
 

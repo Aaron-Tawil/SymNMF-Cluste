@@ -113,7 +113,7 @@ static PyObject *symnmf(PyObject *self, PyObject *args) {
     if (basis->rows != normalized->rows) { PyErr_SetString(PyExc_ValueError, "basis and normalized dimensions differ"); goto cleanup; }
 
     k = basis->cols;
-    if (k == 0) { PyErr_SetString(PyExc_ValueError, "basis must have at least one column"); goto cleanup; }
+    if (k <= 1 || k >= basis->rows) { PyErr_SetString(PyExc_ValueError, "k must satisfy 1 < k < number of samples"); goto cleanup; }
     if (symnmf_factorize(basis, normalized, k, SYM_DEFAULT_EPSILON, SYM_DEFAULT_MAX_ITER) != SYM_SUCCESS) { PyErr_SetString(PyExc_RuntimeError, "symnmf factorization failed"); goto cleanup; }
 
     result = matrix_to_pyobject(basis);

@@ -14,3 +14,7 @@ test_input*.txt
 # Logs
 *.log
 codex_help/
+
+# Temporary debug files
+debug_symnmf.py
+tests/test_analysis.py
