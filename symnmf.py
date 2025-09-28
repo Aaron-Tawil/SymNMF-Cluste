@@ -99,8 +99,8 @@ def init_H(W: np.ndarray, k: int) -> np.ndarray:
     validate_k(k, n)
 
     mean_value = float(np.mean(W, dtype=np.float64))
-    if mean_value <= 0.0:
-        upper = 0.0
+    if mean_value <= 0.0: # should not happen normally
+        upper = EPSILON
     else:
         upper = 2.0 * np.sqrt(mean_value / float(k))
     return np.random.uniform(0.0, upper, size=(n, k)).astype(np.float64, copy=False)

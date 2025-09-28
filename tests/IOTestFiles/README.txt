@@ -1,0 +1,5 @@
+data1.txt: N=10, dim=4, K=3, KMeans silhouette=0.0189, SymNMF silhouette=0.2404 (300 iterations)
+data2.txt: N=6, dim=4, K=4, KMeans silhouette=0.0929, SymNMF silhouette=0.3223 (300 iterations)
+data3.txt: N=9, dim=7, K=8, KMeans silhouette=0.0032, SymNMF silhouette=0.1772 (300 iterations)
+data4.txt: N=8, dim=9, K=6, KMeans silhouette=0.0047, SymNMF silhouette=0.1324 (300 iterations)
+data5.txt: N=7, dim=8, K=2, KMeans silhouette=0.0873, SymNMF silhouette=0.1138 (300 iterations)
