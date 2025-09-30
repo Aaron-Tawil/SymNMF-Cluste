@@ -5,6 +5,6 @@ This directory gathers all test harnesses, fixtures, and reference baselines use
 - legacy/Prev_final_100 — the reference implementation used for regression comparisons.
 
 Available harnesses:
-- `python3 tester.py` — runs the project’s main randomized integration suite with optional Valgrind checks.
+- `python3 tests/tester.py` — runs the project’s main randomized integration suite with optional Valgrind checks.
 - `bash tests/external/project-tests-v8-27fca/run_tests.sh` — executes the official TA matrix of deterministic fixtures (set `SPEED` for subsets).
 - `bash tests/harness/compareTester.sh` — compares current sources against `tests/legacy/Prev_final_100` while compiling and running Valgrind on both.

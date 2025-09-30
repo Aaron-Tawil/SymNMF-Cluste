@@ -97,9 +97,9 @@ python3 analysis.py 3 data/input_1.txt
 
 This project includes three test suites to ensure correctness, performance, and memory safety.
 
-### 1. Main Tester (`tester.py`)
+### 1. Main Tester (`tests/tester.py`)
 
-The `tester.py` script is the primary tool for verifying the implementation. It runs a series of randomized trials against the C implementation, the Python implementation, and the `symnmf_c` extension module. It also uses `valgrind` to check for memory leaks.
+The `tests/tester.py` script is the primary tool for verifying the implementation. It runs a series of randomized trials against the C implementation, the Python implementation, and the `symnmf_c` extension module. It also uses `valgrind` to check for memory leaks.
 
 **To run the main tester:**
 
@@ -111,7 +111,7 @@ The `tester.py` script is the primary tool for verifying the implementation. It 
 
 2.  **Run the tester script:**
     ```sh
-    python3 tester.py
+    python3 tests/tester.py
     ```
     The script will print a detailed summary of successes and failures for each goal (`sym`, `ddg`, `norm`, `symnmf`) across the different implementations.
 
@@ -166,13 +166,13 @@ The project also comes with an external test suite located in the `tests/externa
 ├── symnmf_algo.c    # SymNMF algorithm logic in C
 ├── symnmfmodule.c   # Python C-extension wrapper
 ├── symnmf.h         # Shared C declarations
-├── tester.py        # Randomized test harness
 └── tests/           # Additional test suites and harness scripts
     ├── IOTestFiles/
     ├── README.md
     ├── external/
     ├── harness/
     ├── legacy/
+    ├── tester.py    # Randomized test harness
     ├── test-tgz.py
     └── test_analysis.py
 ```
