@@ -6,7 +6,7 @@ The core logic is written in C for efficiency, wrapped in a Python C extension f
 
 ## About The Project
 
-The goal of SymNMF is to find a low-rank approximation of a normalized similarity matrix derived from a dataset. This approximation is then used to assign data points to clusters. This project implements the full algorithm, from calculating the initial similarity matrix to the final clustering assignment.
+Symmetric Non-negative Matrix Factorization (SymNMF) seeks a low-rank approximation of a normalized similarity matrix while keeping all entries non-negative. The resulting factors behave like latent cluster centroids: each data point is projected into the shared low-dimensional space and assigned to the factor where it has the strongest representation. This reveals groups of points that share strong pairwise relationships without relying on direct distance computations. This project implements the full SymNMF pipeline—from building the similarity matrix through the final clustering assignment—and compares its output with K-Means. For a deeper overview of the underlying theory, see the [Wikipedia article on Non-negative matrix factorization](https://en.wikipedia.org/wiki/Non-negative_matrix_factorization).
 
 Key components:
 - **`symnmf.py`**: A Python CLI for running the SymNMF algorithm and its sub-steps.
@@ -21,12 +21,14 @@ Follow these instructions to get the project built and ready to run.
 
 - Python 3.8+
 - `numpy`
+- `scikit-learn`
+- `scipy`
 - A C compiler (e.g., `gcc`)
 - `make`
 
 You can install the required Python package using pip:
 ```sh
-pip install numpy
+pip install numpy scikit-learn scipy
 ```
 
 ### Installation
@@ -154,20 +156,23 @@ The project also comes with an external test suite located in the `tests/externa
 
 ```
 .
-├── Makefile              # Compiles the standalone C executable
-├── README.md             # This file
-├── analysis.py           # Compares SymNMF and K-Means clustering
-├── setup.py              # Builds the Python C extension
-├── symnmf.py             # Main Python CLI for SymNMF
-├── symnmf.c              # Standalone C executable source
-├── symnmfmodule.c        # Python C extension wrapper
-├── include/
-│   └── symnmf.h          # Header for the C code
-├── src/
-│   ├── matrix_ops.c      # C implementation of matrix operations
-│   └── symnmf_algo.c     # C implementation of the SymNMF algorithm
-└── project-tests-v8-27fca/
-    ├── run_tests.sh      # The main test script
-    ├── a_b_project/      # The expected location for source files
-    └── tests/            # Input/output files for the test cases
+├── Makefile         # Builds the standalone C executable
+├── README.md        # Project overview and usage
+├── analysis.py      # SymNMF vs. K-Means comparison script
+├── matrix_ops.c     # Shared matrix routines for the C code
+├── setup.py         # Builds the Python C extension
+├── symnmf.c         # Standalone C executable entry point
+├── symnmf.py        # Main Python CLI for SymNMF
+├── symnmf_algo.c    # SymNMF algorithm logic in C
+├── symnmfmodule.c   # Python C-extension wrapper
+├── symnmf.h         # Shared C declarations
+├── tester.py        # Randomized test harness
+└── tests/           # Additional test suites and harness scripts
+    ├── IOTestFiles/
+    ├── README.md
+    ├── external/
+    ├── harness/
+    ├── legacy/
+    ├── test-tgz.py
+    └── test_analysis.py
 ```
